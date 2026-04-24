@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🐍 Snakes &amp; Ladders</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- ═══════════════════════════════════════════════════
+       PLAYER SELECTION OVERLAY
+  ════════════════════════════════════════════════════ -->
+  <div id="setup-overlay" class="setup-overlay">
+    <div class="setup-card">
+      <div class="setup-emoji">🐍🪜</div>
+      <h1 class="setup-title">Snakes &amp; Ladders</h1>
+      <p class="setup-sub">How many players are joining?</p>
+
+      <div class="name-inputs" id="setup-controls">
+        <p class="name-inputs-title">Create a Room</p>
+        <input type="text" class="name-input" id="hostName" placeholder="Your Name" maxlength="16"
+          style="margin-bottom: 15px; width: 100%; box-sizing: border-box;" />
+
+        <button class="start-game-btn" onclick="createOnlineRoom()" style="margin-top: 0; width: 100%;">🏠 Create
+          Room</button>
+
+        <hr style="margin: 25px 0; border: 1px solid rgba(0,0,0,0.1);" />
+
+        <p class="name-inputs-title">Join a Room</p>
+        <input type="text" class="name-input" id="joinName" placeholder="Your Name" maxlength="16"
+          style="margin-bottom: 15px; width: 100%; box-sizing: border-box;" />
+        <div style="display: flex; gap: 10px;">
+          <input type="text" class="name-input" id="roomCodeInput" placeholder="Room Code" maxlength="4"
+            style="flex: 1; text-transform: uppercase;" />
+          <button class="change-btn" onclick="joinOnlineRoom()" style="margin-top: 0; flex: 1; padding: 14px;">👥 Join
+            Room</button>
+        </div>
+      </div>
+
+      <!-- Lobby Section (Hidden initially) -->
+      <div id="lobby-section" style="display: none;">
+        <h2 class="setup-title" id="lobby-code-display" style="font-size: 3rem; letter-spacing: 5px;">XXXX</h2>
+        <p class="setup-sub">Share this code with your friends!</p>
+
+        <div id="lobby-players"
+          style="text-align: left; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+          <!-- Populated by Javascript -->
+        </div>
+
+        <button class="start-game-btn" id="start-multiplayer-btn" onclick="startMultiplayerGame()"
+          style="display: none;">🚀 Start Game</button>
+        <p class="setup-hint" id="waiting-msg" style="display: none;">Waiting for the Host to start...</p>
+      </div>
+
+      <p class="setup-hint" id="setup-footer">Roll a <strong>1</strong> to enter the board. Roll a <strong>6</strong>
+        for an extra turn!</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       MAIN GAME
+  ════════════════════════════════════════════════════ -->
+  <div class="container" id="game-container" style="display:none;">
+    <h1>🐍 Snakes &amp; Ladders 🪜</h1>
+    <p class="subtitle" id="player-count-label">Classic Board Game</p>
+
+    <div class="game-area">
+
+      <!-- Board -->
+      <div class="board-wrapper">
+        <canvas id="gameCanvas" width="520" height="520"></canvas>
+      </div>
+
+      <!-- Panel -->
+      <div class="panel">
+
+        <!-- Players -->
+        <div class="players-info" id="players-info">
+          <!-- Dynamically injected by JS -->
+        </div>
+
+        <!-- Turn Indicator -->
+        <div class="turn-box" id="turn-box">
+          🎲 Player 1's Turn
+        </div>
+
+        <!-- Dice -->
+        <div class="dice-area">
+          <div class="dice" id="dice">?</div>
+        </div>
+
+        <!-- Roll Button -->
+        <button class="roll-btn" id="rollBtn" onclick="rollDice()">Roll Dice 🎲</button>
+
+        <!-- Exit Game -->
+        <button class="change-btn" onclick="window.location.reload()">🚪 Exit Game</button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       RANKING OVERLAY (shown when all players finish)
+  ════════════════════════════════════════════════════ -->
+  <div id="ranking-overlay" class="ranking-overlay" style="display:none;">
+    <div class="ranking-card">
+      <div class="ranking-emoji">🏆</div>
+      <h2 class="ranking-title">Final Rankings</h2>
+      <p class="ranking-sub">Everyone has crossed the finish line!</p>
+      <div id="ranking-rows" class="ranking-rows"></div>
+      <div class="ranking-actions">
+        <button class="change-btn" onclick="window.location.reload()">🚪 Exit Game</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load Socket.IO from the backend -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- Load our game logic -->
+  <script src="game.js"></script>
+</body>
+
+</html>
